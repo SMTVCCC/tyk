@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>童禹坤应援网站</title>
+    <style>
+        /* 狗屎色系设计 */
+        body {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Arial Rounded MT Bold', sans-serif;
+            text-align: center;
+            color: #FFD700;
+        }
+        
+        /* 标题样式 */
+        .title {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            font-size: 4rem;
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.7);
+            letter-spacing: 3px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px #FFD700; }
+            50% { text-shadow: 0 0 30px #FF8C00; }
+            100% { text-shadow: 0 0 10px #FFD700; }
+        }
+        
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        /* 视频容器 */
+        .video-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            width: 60vmin;
+            height: 40vmin;
+            border: 10px solid #D2B48C;
+            box-shadow: 0 0 50px #5D4037;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Emoji风暴层 */
+        .emoji-storm {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .emoji {
+            position: absolute;
+            font-size: 3rem;
+            user-select: none;
+            opacity: 0;
+            animation: float 8s linear infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        /* 动画效果 */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.9;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        /* 应援信息栏 */
+        .info {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            background: rgba(139, 69, 19, 0.7);
+            padding: 15px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- 标题 -->
+    <h1 class="title">童禹坤应援网站</h1>
+    
+    <div class="container">
+        <!-- 视频播放器 -->
+        <div class="video-container">
+            <video id="mainVideo" controls autoplay muted>
+                <source src="tyk.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
+        </div>
+        
+        <!-- Emoji特效容器 -->
+        <div class="emoji-storm" id="emojiContainer"></div>
+        
+        <!-- 应援信息 -->
+        <div class="info">
+            🎉 2006.07.07 童禹坤生日快乐 🎂 | 💖 粉丝名：甜心卷 | 🌟 歌舞双修
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('mainVideo');
+            const container = document.getElementById('emojiContainer');
+            
+            // 设置视频循环播放
+            video.loop = true;
+            video.muted = false; // 默认取消静音，如果需要静音启动可以设为true
+            
+            // 创建包含💩的emoji库
+            const emojis = ['💩', '🎉', '✨', '❤️', '🌟', '🔥', '💫', '🥳', '👍', '🎈', '💖', '🎂', '🎁', '🎊', '👑'];
+            
+            function createEmojiStorm() {
+                // 清空容器
+                container.innerHTML = '';
+                
+                // 创建200个emoji元素
+                for(let i = 0; i < 200; i++) {
+                    const emojiEl = document.createElement('div');
+                    emojiEl.className = 'emoji';
+                    emojiEl.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    // 随机样式
+                    emojiEl.style.left = `${Math.random() * 100}vw`;
+                    emojiEl.style.fontSize = `${Math.random() * 4 + 2}rem`;
+                    emojiEl.style.animationDelay = `${Math.random() * 8}s`;
+                    emojiEl.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                    emojiEl.style.color = `hsl(${Math.random() * 60 + 20}, 100%, 60%)`;
+                    
+                    container.appendChild(emojiEl);
+                }
+            }
+            
+            // 初始创建
+            createEmojiStorm();
+            
+            // 每30秒刷新一次特效
+            setInterval(createEmojiStorm, 30000);
+            
+            // 点击页面进入全屏播放并禁止交互
+            let isFullScreen = false;
+            document.addEventListener('click', function enterFullScreenOnClick() {
+                if (!isFullScreen) {
+                    if (video.requestFullscreen) {
+                        video.requestFullscreen();
+                    } else if (video.mozRequestFullScreen) { /* Firefox */
+                        video.mozRequestFullScreen();
+                    } else if (video.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                        video.webkitRequestFullscreen();
+                    } else if (video.msRequestFullscreen) { /* IE/Edge */
+                        video.msRequestFullscreen();
+                    }
+                    video.play(); // 确保视频播放
+                    video.removeAttribute('controls'); // 移除控制条，禁止交互
+                    isFullScreen = true; 
+                    // 可选：一旦进入全屏，移除此监听器，防止后续点击产生影响
+                    // document.removeEventListener('click', enterFullScreenOnClick);
+                }
+            });
+
+            // 监听全屏状态变化，退出全屏时恢复控件（如果需要）
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    isFullScreen = false;
+                    // video.setAttribute('controls', 'controls'); // 如果希望退出全屏后恢复控件
+                }
+            });
+            document.addEventListener('webkitfullscreenchange', () => { // Safari, Chrome
+                if (!document.webkitIsFullScreen) {
+                    isFullScreen = false;
+                    // video.setAttribute('controls', 'controls');
+                }
+            });
+            document.addEventListener('mozfullscreenchange', () => { // Firefox
+                if (!document.mozFullScreen) {
+                    isFullScreen = false;
+                    // video.setAttribute('controls', 'controls');
+                }
+            });
+            document.addEventListener('MSFullscreenChange', () => { // IE/Edge
+                if (!document.msFullscreenElement) {
+                    isFullScreen = false;
+                    // video.setAttribute('controls', 'controls');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
