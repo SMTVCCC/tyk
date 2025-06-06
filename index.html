@@ -117,7 +117,7 @@
     <div class="container">
         <!-- 视频播放器 -->
         <div class="video-container">
-            <video id="mainVideo" controls autoplay muted>
+            <video id="mainVideo" controls autoplay loop>
                 <source src="tyk.mp4" type="video/mp4">
                 您的浏览器不支持视频播放
             </video>
@@ -137,9 +137,9 @@
             const video = document.getElementById('mainVideo');
             const container = document.getElementById('emojiContainer');
             
-            // 设置视频循环播放
+            // 设置视频循环播放并取消静音
             video.loop = true;
-            video.muted = false; // 默认取消静音，如果需要静音启动可以设为true
+            video.muted = false;
             
             // 创建包含💩的emoji库
             const emojis = ['💩', '🎉', '✨', '❤️', '🌟', '🔥', '💫', '🥳', '👍', '🎈', '💖', '🎂', '🎁', '🎊', '👑'];
